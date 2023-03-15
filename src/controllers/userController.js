@@ -24,7 +24,7 @@ export async function updateUserController(req, res) {}
 
 export async function updatePasswordController(req, res) {
   const { idUser, updatePass } = req.body;
-  await UserModel.findByIdAndUpdate(idUser, updatePass)
+  await UserModel.findByIdAndUpdate(idUser, {updatePass})
     .then((responseUpdate) => {
       if (responseUpdate) {
         return res.status(200).json({ message: "Password updated" });
