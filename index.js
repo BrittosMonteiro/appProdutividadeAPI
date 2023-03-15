@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 5050;
-const CONNECT = process.env.MONGO_CONNECT_DEV;
+const CONNECT = process.env.MONGO_CONNECT_PROD;
 const DATABASE = process.env.MONGO_DATABASE;
 
 import ListRoute from "./src/routes/listRoute.js";
@@ -23,7 +23,7 @@ app.use("/users", UserRoute);
 app.use("/login", LoginRoute);
 
 try {
-  //   mongoose.set("strictQuery", true);
+  mongoose.set("strictQuery", true);
   mongoose.connect(`${CONNECT}/${DATABASE}`);
 } catch (err) {
   console.log(err.message);
