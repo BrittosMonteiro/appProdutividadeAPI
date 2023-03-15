@@ -108,6 +108,22 @@ export async function updateTaskController(req, res) {
     });
 }
 
+export async function updateTaskStatusService(req, res) {
+  const data = req.body;
+
+  await TaskModel.findByIdAndUpdate(data.id, { status: data.status })
+    .then((responseUpdate) => {
+      if (responseUpdate) {
+        return res.status(200).json({ message: "Task status updated" });
+      } else {
+        return;
+      }
+    })
+    .catch((err) => {
+      return;
+    });
+}
+
 export async function deleteTaskController(req, res) {
   const { idTask } = req.body;
 
