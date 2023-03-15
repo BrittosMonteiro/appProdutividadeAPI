@@ -22,6 +22,8 @@ export async function readMiniListController(req, res) {
 
   await ListModel.find(idUser)
     .limit(3)
+    .where("status")
+    .equals(false)
     .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
@@ -103,6 +105,22 @@ export async function updateListController(req, res) {
     .then((responseUpdate) => {
       if (responseUpdate) {
         return res.status(200).json({ message: "List updated" });
+      } else {
+        return;
+      }
+    })
+    .catch((err) => {
+      return;
+    });
+}
+
+export async function updateListStatusController(req, res) {
+  const data = req.body;
+
+  await ListModel.findByIdAndUpdate(data.idList, { status: data.status })
+    .then((responseUpdate) => {
+      if (responseUpdate) {
+        return res.status(200).json({ message: "List status updated" });
       } else {
         return;
       }
