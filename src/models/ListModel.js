@@ -8,6 +8,7 @@ const listSchema = new mongoose.Schema({
   priority: { type: Number, required: true, default: 0 },
   title: { type: String, required: true },
   updatedAt: { type: Date, required: true, default: Date.now() },
+  status: { type: Boolean, required: true, default: false },
 });
 
 const ListModel = mongoose.model("list", listSchema);
