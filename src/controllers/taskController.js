@@ -112,7 +112,6 @@ export async function updateTaskController(req, res) {
 
 export async function updateTaskStatusService(req, res) {
   const data = req.body;
-  console.log(data.idTask);
 
   await TaskModel.findByIdAndUpdate(data.idTask, { status: data.status })
     .then((responseUpdate) => {
