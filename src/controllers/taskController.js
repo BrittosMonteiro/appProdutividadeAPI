@@ -32,6 +32,7 @@ export async function readTaskMiniListController(req, res) {
             title: response.title,
             description: response.description,
             priority: response.priority,
+            status: response.status,
           };
           taskList.unshift(task);
         }
@@ -54,6 +55,7 @@ export async function readTaskListController(req, res) {
             title: response.title,
             description: response.description,
             priority: response.priority,
+            status: response.status,
           };
           taskList.unshift(task);
         }
@@ -78,6 +80,7 @@ export async function readTasksController(req, res) {
           title: responseFind.title,
           description: responseFind.description,
           priority: responseFind.priority,
+          status: responseFind.status,
         };
         return res.status(200).json({ data: task });
       } else {

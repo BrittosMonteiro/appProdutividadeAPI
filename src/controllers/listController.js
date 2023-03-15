@@ -33,6 +33,7 @@ export async function readMiniListController(req, res) {
             description: response.description,
             items: response.item,
             priority: response.priority,
+            status: response.status,
           };
           itemsList.unshift(item);
         }
@@ -61,6 +62,7 @@ export async function readListController(req, res) {
             description: response.description,
             items: response.item,
             priority: response.priority,
+            status: response.status,
           };
           itemsList.unshift(item);
         }
@@ -86,6 +88,7 @@ export async function readItemListController(req, res) {
           description: responseFind.description,
           items: responseFind.item,
           priority: responseFind.priority,
+          status: responseFind.status,
         };
         return res.status(200).json({ data: item });
       }
