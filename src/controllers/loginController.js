@@ -7,7 +7,11 @@ export async function createUserController(req, res) {
     .save()
     .then((responseCreate) => {
       if (responseCreate) {
-        return res.status(201).json({ data: responseCreate });
+        const user = {
+          id: responseCreate._id.toString(),
+          name: responseCreate.name,
+        };
+        return res.status(201).json({ data: user });
       } else {
         return;
       }
