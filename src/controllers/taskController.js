@@ -22,6 +22,8 @@ export async function readTaskMiniListController(req, res) {
 
   await TaskModel.find(idUser)
     .limit(3)
+    .where("status")
+    .equals(false)
     .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
@@ -110,8 +112,9 @@ export async function updateTaskController(req, res) {
 
 export async function updateTaskStatusService(req, res) {
   const data = req.body;
+  console.log(data.idTask);
 
-  await TaskModel.findByIdAndUpdate(data.id, { status: data.status })
+  await TaskModel.findByIdAndUpdate(data.idTask, { status: data.status })
     .then((responseUpdate) => {
       if (responseUpdate) {
         return res.status(200).json({ message: "Task status updated" });
