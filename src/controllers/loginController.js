@@ -1,3 +1,9 @@
+import {
+  createdData,
+  errorServiceUnavailable,
+  noContent,
+  successData,
+} from "../handlers/response.js";
 import UserModel from "../models/UserModel.js";
 
 export async function createUserController(req, res) {
@@ -11,13 +17,13 @@ export async function createUserController(req, res) {
           id: responseCreate._id.toString(),
           name: responseCreate.name,
         };
-        return res.status(201).json({ data: user });
+        return createdData(res, user);
       } else {
-        return;
+        return noContent(res, "Usuário não pode ser criado. Tente mais tarde");
       }
     })
     .catch(() => {
-      return;
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -31,12 +37,12 @@ export async function loginController(req, res) {
           name: responseFindOne.name,
           id: responseFindOne._id.toString(),
         };
-        return res.status(200).json({ data: user });
+        return successData(res, user);
       } else {
-        return;
+        return noContent(res, "Usuário e/ou senha incorretos");
       }
     })
     .catch(() => {
-      return;
+      return errorServiceUnavailable(res);
     });
 }
