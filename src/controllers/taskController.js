@@ -43,7 +43,7 @@ export async function readTaskMiniListController(req, res) {
             priority: response.priority,
             status: response.status,
           };
-          taskList.unshift(task);
+          taskList.push(task);
         }
         return successData(res, taskList);
       } else {
@@ -73,7 +73,7 @@ export async function readTaskListController(req, res) {
             priority: response.priority,
             status: response.status,
           };
-          taskList.unshift(task);
+          taskList.push(task);
         }
         return successData(res, taskList);
       } else {

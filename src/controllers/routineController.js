@@ -39,7 +39,7 @@ export async function readRoutineMiniListController(req, res) {
             title: response.title,
             description: response.description,
           };
-          routineList.unshift(routine);
+          routineList.push(routine);
         }
         return successData(res, routineList);
       } else {
@@ -65,7 +65,7 @@ export async function readRoutineListController(req, res) {
             title: response.title,
             description: response.description,
           };
-          routineList.unshift(routine);
+          routineList.push(routine);
         }
         return successData(res, routineList);
       } else {

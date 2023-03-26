@@ -44,7 +44,7 @@ export async function readMiniListController(req, res) {
             priority: response.priority,
             status: response.status,
           };
-          itemsList.unshift(item);
+          itemsList.push(item);
         }
         return successData(res, itemsList);
       } else {
@@ -73,7 +73,7 @@ export async function readListController(req, res) {
             priority: response.priority,
             status: response.status,
           };
-          itemsList.unshift(item);
+          itemsList.push(item);
         }
         return successData(res, itemsList);
       } else {
