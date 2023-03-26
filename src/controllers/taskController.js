@@ -1,3 +1,10 @@
+import {
+  createdMessage,
+  errorServiceUnavailable,
+  noContent,
+  successData,
+  successMessage,
+} from "../handlers/response.js";
 import TaskModel from "../models/TaskModel.js";
 
 export async function createTaskController(req, res) {
@@ -7,13 +14,13 @@ export async function createTaskController(req, res) {
     .save()
     .then((responseCreate) => {
       if (responseCreate) {
-        return res.status(201).json({ message: "Task created" });
+        return createdMessage(res, "Task created");
       } else {
-        return;
+        return noContent(res, "Task could no bt created");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -38,16 +45,23 @@ export async function readTaskMiniListController(req, res) {
           };
           taskList.unshift(task);
         }
-        return res.status(200).json({ data: taskList });
+        return successData(res, taskList);
+      } else {
+        return noContent(res, "Task could not be found");
       }
     })
-    .catch((err) => {});
+    .catch(() => {
+      return errorServiceUnavailable(res);
+    });
 }
 
 export async function readTaskListController(req, res) {
   const idUser = req.params;
 
   await TaskModel.find(idUser)
+    .where("status")
+    .equals(false)
+    .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
         let taskList = [];
@@ -61,13 +75,13 @@ export async function readTaskListController(req, res) {
           };
           taskList.unshift(task);
         }
-        return res.status(200).json({ data: taskList });
+        return successData(res, taskList);
       } else {
-        return;
+        return noContent(res, "Task could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -75,6 +89,9 @@ export async function readTasksController(req, res) {
   const { idTask } = req.params;
 
   await TaskModel.findById(idTask)
+    .where("status")
+    .equals(false)
+    .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
         const task = {
@@ -84,13 +101,13 @@ export async function readTasksController(req, res) {
           priority: responseFind.priority,
           status: responseFind.status,
         };
-        return res.status(200).json({ data: task });
+        return successData(res, task);
       } else {
-        return;
+        return noContent(res, "Task could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -100,13 +117,13 @@ export async function updateTaskController(req, res) {
   await TaskModel.findByIdAndUpdate(idTask, task)
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "Task updated" });
+        return successMessage(res, "Task updated");
       } else {
-        return;
+        return noContent(res, "Task could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -116,13 +133,13 @@ export async function updateTaskStatusService(req, res) {
   await TaskModel.findByIdAndUpdate(data.idTask, { status: data.status })
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "Task status updated" });
+        return successMessage(res, "Task updated");
       } else {
-        return;
+        return noContent(res, "Task could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -132,12 +149,12 @@ export async function deleteTaskController(req, res) {
   await TaskModel.findByIdAndDelete(idTask)
     .then((responseDelete) => {
       if (responseDelete) {
-        return res.status(200).json({ message: "Task deleted" });
+        return successMessage(res, "Task deleted");
       } else {
-        return;
+        return noContent(res, "Task could not be deleted");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
