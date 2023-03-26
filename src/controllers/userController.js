@@ -1,3 +1,9 @@
+import {
+  errorServiceUnavailable,
+  noContent,
+  successData,
+  successMessage,
+} from "../handlers/response.js";
 import UserModel from "../models/UserModel.js";
 
 export async function readUserController(req, res) {
@@ -13,27 +19,30 @@ export async function readUserController(req, res) {
           email: responseFind.email,
           username: responseFind.username,
         };
-
-        return res.status(200).json({ data: userData });
+        return successData(res, userData);
+      } else {
+        return noContent(res, "User could not be found");
       }
     })
-    .catch((err) => {});
+    .catch(() => {
+      return errorServiceUnavailable(res);
+    });
 }
 
 export async function updateUserController(req, res) {}
 
 export async function updatePasswordController(req, res) {
   const { idUser, updatePass } = req.body;
-  await UserModel.findByIdAndUpdate(idUser, {updatePass})
+  await UserModel.findByIdAndUpdate(idUser, { updatePass })
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "Password updated" });
+        return successMessage(res, "Password updated");
       } else {
-        return;
+        return noContent(res, "Password could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -43,12 +52,12 @@ export async function deleteUserController(req, res) {
   await UserModel.findByIdAndDelete(idUser)
     .then((responseDelete) => {
       if (responseDelete) {
-        return res.status(200).json({ message: "User deleted" });
+        return successMessage(res, "Used deleted");
       } else {
-        return;
+        return noContent(res, "User could not be deleted");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
