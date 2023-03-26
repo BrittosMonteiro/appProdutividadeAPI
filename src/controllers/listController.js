@@ -1,3 +1,10 @@
+import {
+  createdMessage,
+  errorServiceUnavailable,
+  noContent,
+  successData,
+  successMessage,
+} from "../handlers/response.js";
 import ListModel from "../models/ListModel.js";
 
 export async function createListController(req, res) {
@@ -7,13 +14,13 @@ export async function createListController(req, res) {
     .save()
     .then((responseCreate) => {
       if (responseCreate) {
-        return res.status(201).json({ message: "List created" });
+        return createdMessage(res, "List created");
       } else {
-        return;
+        return noContent(res, "List could not be created");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -39,13 +46,13 @@ export async function readMiniListController(req, res) {
           };
           itemsList.unshift(item);
         }
-        return res.status(200).json({ data: itemsList });
+        return successData(res, itemsList);
       } else {
-        return;
+        return noContent(res, "List could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -68,13 +75,13 @@ export async function readListController(req, res) {
           };
           itemsList.unshift(item);
         }
-        return res.status(200).json({ data: itemsList });
+        return successData(res, itemsList);
       } else {
-        return;
+        return noContent(res, "List could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -92,10 +99,14 @@ export async function readItemListController(req, res) {
           priority: responseFind.priority,
           status: responseFind.status,
         };
-        return res.status(200).json({ data: item });
+        return successData(res, item);
+      } else {
+        return noContent(res, "List could not be found");
       }
     })
-    .catch((err) => {});
+    .catch(() => {
+      return errorServiceUnavailable(res);
+    });
 }
 
 export async function updateListController(req, res) {
@@ -104,13 +115,13 @@ export async function updateListController(req, res) {
   await ListModel.findByIdAndUpdate(idList, list)
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "List updated" });
+        return successMessage(res, "List updated");
       } else {
-        return;
+        return noContent(res, "List could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -120,13 +131,13 @@ export async function updateListStatusController(req, res) {
   await ListModel.findByIdAndUpdate(data.idList, { status: data.status })
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "List status updated" });
+        return successMessage(res, "List status updated");
       } else {
-        return;
+        return noContent(res, "List could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -136,12 +147,12 @@ export async function deleteListController(req, res) {
   await ListModel.findByIdAndDelete(idList)
     .then((responseDelete) => {
       if (responseDelete) {
-        return res.status(200).json({ message: "List deleted" });
+        return successMessage(res, "List deleted");
       } else {
-        return;
+        return noContent(res, "List could not be deleted");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }

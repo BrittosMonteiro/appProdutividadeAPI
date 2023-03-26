@@ -1,3 +1,10 @@
+import {
+  createdMessage,
+  errorServiceUnavailable,
+  noContent,
+  successData,
+  successMessage,
+} from "../handlers/response.js";
 import RoutineModel from "../models/RoutineModel.js";
 
 export async function createRoutineController(req, res) {
@@ -7,13 +14,13 @@ export async function createRoutineController(req, res) {
     .save()
     .then((responseCreate) => {
       if (responseCreate) {
-        return res.status(201).json({ message: "routine created" });
+        return createdMessage(res, "Routine created");
       } else {
-        return;
+        return noContent(res, "Routine could not be created");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -34,16 +41,21 @@ export async function readRoutineMiniListController(req, res) {
           };
           routineList.unshift(routine);
         }
-        return res.status(200).json({ data: routineList });
+        return successData(res, routineList);
+      } else {
+        return noContent(res, "Routine list could not be found");
       }
     })
-    .catch((err) => {});
+    .catch(() => {
+      return errorServiceUnavailable(res);
+    });
 }
 
 export async function readRoutineListController(req, res) {
   const idUser = req.params;
 
   await RoutineModel.find(idUser)
+    .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
         let routineList = [];
@@ -55,13 +67,13 @@ export async function readRoutineListController(req, res) {
           };
           routineList.unshift(routine);
         }
-        return res.status(200).json({ data: routineList });
+        return successData(res, routineList);
       } else {
-        return;
+        return noContent(res, "Routine list could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -69,6 +81,7 @@ export async function readRoutineController(req, res) {
   const { idRoutine } = req.params;
 
   await RoutineModel.findById(idRoutine)
+    .sort({ createdAt: "desc" })
     .then((responseFind) => {
       if (responseFind) {
         const routine = {
@@ -76,13 +89,13 @@ export async function readRoutineController(req, res) {
           title: responseFind.title,
           description: responseFind.description,
         };
-        return res.status(200).json({ data: routine });
+        return successData(res, routine);
       } else {
-        return;
+        return noContent(res, "Routine could not be found");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -92,13 +105,13 @@ export async function updateRoutineController(req, res) {
   await RoutineModel.findByIdAndUpdate(idRoutine, routine)
     .then((responseUpdate) => {
       if (responseUpdate) {
-        return res.status(200).json({ message: "routine updated" });
+        return successMessage(res, "Routine updated");
       } else {
-        return;
+        return noContent(res, "Routine could not be updated");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
 
@@ -108,12 +121,12 @@ export async function deleteRoutineController(req, res) {
   await RoutineModel.findByIdAndDelete(idRoutine)
     .then((responseDelete) => {
       if (responseDelete) {
-        return res.status(200).json({ message: "routine deleted" });
+        return successMessage(res, "Routine deleted");
       } else {
-        return;
+        return noContent(res, "Routine could not be deleted");
       }
     })
-    .catch((err) => {
-      return;
+    .catch(() => {
+      return errorServiceUnavailable(res);
     });
 }
